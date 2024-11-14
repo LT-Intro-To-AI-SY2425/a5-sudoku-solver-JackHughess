@@ -90,7 +90,7 @@ class Board:
             row - index of the cell's row, 0 - 8
             col - index of the cell's col, 0 - 8
 
-        Returns:
+        Returns: 
             list of (row, col) that represent all cells in the box.
         """
         subgrids = [(0, 1, 2), (3, 4, 5), (6, 7, 8)]
@@ -106,7 +106,19 @@ class Board:
         Returns:
             a tuple of row, column index identifying the most constrained cell
         """
-        pass
+        leastRowColumnNum = [None, None, 10]
+        for i in self.rows:
+            for j in self.rows[i]:
+                cur = self.rows[i][j]
+                if type(cur) == type([]):
+                    if len(cur) < leastRowColumnNum[2]:
+                        leastRowColumnNum[0] = i
+                        leastRowColumnNum[1] = j
+                        leastRowColumnNum[2] = len(cur)
+        
+        return (leastRowColumnNum[0], leastRowColumnNum[1])
+
+
 
     def failure_test(self) -> bool:
         """Check if we've failed to correctly fill out the puzzle. If we find a cell
@@ -116,7 +128,12 @@ class Board:
         Returns:
             True if we have failed to fill out the puzzle, False otherwise
         """
-        pass
+        for i in self.rows:
+            for j in self.rows[i]:
+                cur = self.rows[i][j]
+                if len(cur) == 0:
+                    return True
+        return False
 
     def goal_test(self) -> bool:
         """Check if we've completed the puzzle (if we've placed all the numbers).
@@ -125,7 +142,9 @@ class Board:
         Returns:
             True if we've placed all numbers, False otherwise
         """
-        pass
+        if self.num_nums_placed >=81:
+            return True
+        return False
 
     def update(self, row: int, column: int, assignment: int) -> None:
         """Assigns the given value to the cell given by passed in row and column
@@ -139,7 +158,16 @@ class Board:
             column - index of the column to assign
             assignment - value to place at given row, column coordinate
         """
-        pass
+        
+        self.rows[row][column] = assignment
+
+        for i in range(self.size):
+            remove_if_exists(self.rows[row][i])
+            remove_if_exists(self.rows[i][column])
+
+        for i,j in self.subgrid_coordinates(row, column):
+            remove_if_exists(self.rows[i][j], assignment)
+
 
 
 def DFS(state: Board) -> Board:
