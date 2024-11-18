@@ -168,6 +168,8 @@ class Board:
         for i,j in self.subgrid_coordinates(row, column):
             remove_if_exists(self.rows[i][j], assignment)
 
+        self.num_nums_placed = self.num_nums_placed + 1
+
 
 
 def DFS(state: Board) -> Board:
@@ -182,7 +184,8 @@ def DFS(state: Board) -> Board:
     Returns:
         either None in the case of invalid input or a solved board
     """
-    pass
+
+    # stack
 
 
 def BFS(state: Board) -> Board:
@@ -197,7 +200,8 @@ def BFS(state: Board) -> Board:
     Returns:
         either None in the case of invalid input or a solved board
     """
-    pass
+    
+    # Queue
 
 
 if __name__ == "__main__":
